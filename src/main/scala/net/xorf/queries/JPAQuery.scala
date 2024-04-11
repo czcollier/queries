@@ -1,4 +1,4 @@
-package com.bullhorn
+package net.xorf.queries
 
 import Query._
 
@@ -25,7 +25,7 @@ class ExprCount {
 }
 
 object JPAQuery {
-  private def formatCond(cnt: ExprCount, name: String, op: String) = "%1$s %2$s :%3$s".format(name, op, cnt++())
+  private def formatCond(cnt: ExprCount, name: String, op: String) = "%1$s %2$s :%3$s".format(name, op, cnt.++())
 
   private def emitExpr(cnt: ExprCount, e: Expr): String = {
     e match {
@@ -47,12 +47,12 @@ object JPAQuery {
 
   private def setParameters(map: Map[String, Any], cnt: ExprCount, e: WhereExpr): Map[String, Any] = {
     e match {
-      case x:Condition => map + (cnt++() -> formatValue(x))
+      case x:Condition => map + (cnt.++() -> formatValue(x))
       case x:BooleanOp => {
         setParameters(map, cnt,  x.bl) ++ setParameters(map, cnt,  x.br)
       }
     }
   }
 
-  implicit def query2JPAQuery[T](q: Query[T]) = new JPAQuery(q)
+  implicit def query2JPAQuery[T](q: Query[T]): JPAQuery[T] = new JPAQuery(q)
 }

@@ -1,4 +1,4 @@
-package com.bullhorn
+package net.xorf.queries
 
 abstract class Expr
 abstract class BooleanExpr(val left: Expr, val right: Expr) extends Expr
@@ -51,6 +51,6 @@ case class LTCondition[T](n: FieldName, v: Value[Comparable[T]]) extends Conditi
 object Query {
   def from[T](implicit manifest: Manifest[T]) = new FromExpr[T](manifest)
 
-  implicit def string2fieldName(name: String) = FieldName(name)
-  implicit def fieldName2String(fn: FieldName) = fn.name
+  implicit def string2fieldName(name: String): FieldName = FieldName(name)
+  implicit def fieldName2String(fn: FieldName): String = fn.name
 }
